@@ -1,0 +1,6 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Instant-merge variant of the default preset: enables GitHub native auto-merge (platformAutomerge) so approved, green PRs merge the moment checks pass instead of waiting for Renovate's next run. SAFE ONLY on repos that have required status checks — native auto-merge waits only for *required* checks, so a repo without them would merge before CI finishes. Repos without required checks should extend the default preset instead.",
+  "extends": ["github>benbalter/renovate-config"],
+  "platformAutomerge": true
+}
