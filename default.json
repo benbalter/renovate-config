@@ -1,19 +1,23 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    ":automergeMinor",
-    ":semanticCommits",
-    "helpers:pinGitHubActionDigests"
-  ],
+  "description": "Default Renovate policy for @benbalter repos: weekly batched updates, a 7-day quarantine on fresh releases, auto-merge for patch/minor and devDependencies, review required for major production bumps, and no digest/SHA pinning.",
+  "extends": ["config:recommended", ":automergeMinor", ":semanticCommits"],
   "minimumReleaseAge": "7 days",
   "internalChecksFilter": "strict",
+  "internalChecksAsSuccess": true,
   "platformAutomerge": false,
+  "pinDigests": false,
   "prConcurrentLimit": 10,
   "prHourlyLimit": 4,
   "dependencyDashboard": true,
   "schedule": ["before 9am on monday"],
   "packageRules": [
+    {
+      "description": "Batch GitHub Actions minor/patch bumps into a single PR",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "github-actions"
+    },
     {
       "description": "Auto-merge devDependencies (they don't ship to users)",
       "matchDepTypes": ["devDependencies"],
