@@ -41,6 +41,28 @@ workflows' `GITHUB_TOKEN` permissions minimal and avoid exposing long-lived secr
 `postUpgradeTasks` (arbitrary command execution) is intentionally not used and is disabled on
 the Mend-hosted app.
 
+## Clearing auto-merged Renovate notifications
+
+[`clear-renovate-notifications.yml`](.github/workflows/clear-renovate-notifications.yml) runs
+hourly and marks as **done** every notification for a PR that `renovate[bot]` opened and merged
+after a bot (e.g. `renovate-approve[bot]`) approved it and no human reviewed it. PRs that are
+still open, that a person reviewed, or that a person merged are left in the inbox.
+
+Setup: create a [classic PAT](https://github.com/settings/tokens) with the `notifications` scope
+(add `repo` so it can read PRs in private repos; fine-grained PATs don't support the notifications API)
+and save it as the `NOTIFICATION_TOKEN` repo secret. Run the workflow manually with `dry_run`
+checked to preview what it would clear, or locally:
+
+```sh
+GH_TOKEN=$(gh auth token) DRY_RUN=true node .github/scripts/run-local.js
+```
+
+The logic lives in [`clear-renovate-notifications.js`](.github/scripts/clear-renovate-notifications.js)
+(run by `actions/github-script`); tests run in CI with `node --test .github/scripts/*.test.js`.
+
+GitHub disables scheduled workflows after 60 days without repo activity; Renovate's own PRs here
+should keep it alive, but re-enable it from the Actions tab if it stops.
+
 ## Validate changes
 
 ```sh
