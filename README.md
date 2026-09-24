@@ -21,7 +21,7 @@ reference.
 ## Policy summary
 
 - **Base**: `config:recommended` (sane defaults + monorepo/related grouping) plus semantic
-  commits and GitHub Action digest pinning.
+  commits. GitHub Actions stay on version tags (e.g. `@v4`), not pinned to SHA digests.
 - **Auto-merge**: patch + minor updates auto-merge once CI is green (`:automergeMinor`).
   `devDependencies` auto-merge freely; **major** production-dependency bumps require review.
 - **`platformAutomerge: false`**: Renovate merges only after it observes CI is green, so the

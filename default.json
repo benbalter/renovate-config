@@ -3,8 +3,7 @@
   "extends": [
     "config:recommended",
     ":automergeMinor",
-    ":semanticCommits",
-    "helpers:pinGitHubActionDigests"
+    ":semanticCommits"
   ],
   "minimumReleaseAge": "7 days",
   "internalChecksFilter": "strict",
