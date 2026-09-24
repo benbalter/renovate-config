@@ -23,15 +23,30 @@ reference.
 - **Base**: `config:recommended` (sane defaults + monorepo/related grouping) plus semantic
   commits. GitHub Actions stay on version tags (e.g. `@v4`), not pinned to SHA digests.
 - **Auto-merge**: patch + minor updates auto-merge once CI is green (`:automergeMinor`).
-  `devDependencies` auto-merge freely; **major** production-dependency bumps require review.
+  Dev dependencies auto-merge freely (npm `devDependencies`, Composer `require-dev`, Bundler
+  `development`/`test` groups, Poetry/Cargo `dev-dependencies`, uv/PDM dev groups); **major**
+  production-dependency bumps (npm/Poetry/Cargo `dependencies`, Composer `require`, PEP 621
+  `project.dependencies`) require review.
+- **Lock file maintenance**: weekly refresh of lock files (transitive deps), auto-merged.
+- **Vulnerability alerts**: `osvVulnerabilityAlerts` opens fixes for deps with an OSV advisory,
+  bypassing the schedule and release-age window.
 - **`platformAutomerge: false`**: Renovate merges only after it observes CI is green, so the
   "tests must pass" gate holds regardless of a repo's branch-protection config. Trade-off: merge
   happens on Renovate's next run (minutes), not the instant CI turns green.
 - **`minimumReleaseAge: "7 days"`**: quarantine window so freshly-published (potentially
   malicious) releases have time to be yanked before they auto-merge. Bump to `"14 days"` for a
   stricter posture.
-- **Rate limits & schedule**: batched weekly, `prConcurrentLimit` / `prHourlyLimit` capped.
-- **Dependency Dashboard** enabled for at-a-glance visibility per repo.
+- **Rate limits & schedule**: batched weekly (Monday before 9am `America/New_York`),
+  `prConcurrentLimit` / `prHourlyLimit` capped. PRs are labeled `dependencies`.
+- **Dependency Dashboard** (from `config:recommended`) for at-a-glance visibility per repo.
+
+## Variants
+
+- **`github>benbalter/renovate-config:instant`**: GitHub native auto-merge
+  (`platformAutomerge`). Only for repos with required status checks.
+- **`github>benbalter/renovate-config:quiet`**: `automergeType: "branch"`. Auto-mergeable
+  updates merge straight from their branch once CI is green, with no PR and no notification.
+  Updates needing review still get a PR. Not for repos whose branch protection requires PRs.
 
 ## Security notes
 
@@ -66,5 +81,5 @@ should keep it alive, but re-enable it from the Actions tab if it stops.
 ## Validate changes
 
 ```sh
-npx --package renovate renovate-config-validator --strict default.json
+npx --package renovate renovate-config-validator --strict default.json instant.json quiet.json renovate.json
 ```

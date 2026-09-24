@@ -1,0 +1,6 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Quiet variant of the default preset: updates that would auto-merge are merged straight from their branch once CI is green, with no PR opened, so they generate no notifications. Updates that need review still get a PR. NOT compatible with branch protection that requires pull requests on the default branch; Renovate falls back to opening a PR if the branch push is rejected.",
+  "extends": ["github>benbalter/renovate-config"],
+  "automergeType": "branch"
+}

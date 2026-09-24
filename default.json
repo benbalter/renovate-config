@@ -3,24 +3,38 @@
   "extends": [
     "config:recommended",
     ":automergeMinor",
-    ":semanticCommits"
+    ":semanticCommits",
+    ":maintainLockFilesWeekly"
   ],
   "minimumReleaseAge": "7 days",
   "internalChecksFilter": "strict",
   "platformAutomerge": false,
   "prConcurrentLimit": 10,
   "prHourlyLimit": 4,
-  "dependencyDashboard": true,
+  "timezone": "America/New_York",
   "schedule": ["before 9am on monday"],
+  "labels": ["dependencies"],
+  "osvVulnerabilityAlerts": true,
+  "lockFileMaintenance": {
+    "automerge": true
+  },
   "packageRules": [
     {
-      "description": "Auto-merge devDependencies (they don't ship to users)",
-      "matchDepTypes": ["devDependencies"],
+      "description": "Auto-merge dev dependencies (they don't ship to users): npm, Composer, Bundler groups, Poetry/Cargo, uv/PDM",
+      "matchDepTypes": [
+        "devDependencies",
+        "require-dev",
+        "development",
+        "test",
+        "dev-dependencies",
+        "tool.uv.dev-dependencies",
+        "tool.pdm.dev-dependencies"
+      ],
       "automerge": true
     },
     {
-      "description": "Require review for major production-dependency bumps",
-      "matchDepTypes": ["dependencies"],
+      "description": "Require review for major production-dependency bumps: npm/Poetry/Cargo, Composer, PEP 621",
+      "matchDepTypes": ["dependencies", "require", "project.dependencies"],
       "matchUpdateTypes": ["major"],
       "automerge": false
     }
