@@ -1,8 +1,8 @@
-name: Clear Renovate notifications
+name: Clear bot notifications
 
 on:
   schedule:
-    - cron: "17 * * * *"
+    - cron: "*/15 * * * *"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - name: Mark auto-merged Renovate PR notifications as done
+      - name: Mark bot PR and issue notifications as done
         uses: actions/github-script@v9
         env:
           DRY_RUN: ${{ inputs.dry_run || 'false' }}
