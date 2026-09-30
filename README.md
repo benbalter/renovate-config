@@ -27,7 +27,8 @@ reference.
   `development`/`test` groups, Poetry/Cargo `dev-dependencies`, uv/PDM dev groups); **major**
   production-dependency bumps (npm/Poetry/Cargo `dependencies`, Composer `require`, PEP 621
   `project.dependencies`) require review.
-- **Lock file maintenance**: weekly refresh of lock files (transitive deps), auto-merged.
+- **Lock file maintenance**: weekly refresh of lock files (transitive deps), auto-merged. Runs
+  any time on Monday (`America/New_York`) so a daily Mend run is guaranteed to land in the window.
 - **Vulnerability alerts**: `osvVulnerabilityAlerts` opens fixes for deps with an OSV advisory,
   bypassing the schedule and release-age window.
 - **`platformAutomerge: false`**: Renovate merges only after it observes CI is green, so the
@@ -36,8 +37,15 @@ reference.
 - **`minimumReleaseAge: "7 days"`**: quarantine window so freshly-published (potentially
   malicious) releases have time to be yanked before they auto-merge. Bump to `"14 days"` for a
   stricter posture.
-- **Rate limits & schedule**: batched weekly (Monday before 9am `America/New_York`),
-  `prConcurrentLimit` / `prHourlyLimit` capped. PRs are labeled `dependencies`.
+- **No schedule for regular updates**: PRs open on any Renovate run. The Mend-hosted app runs
+  a repo only every ~4 hours (daily for repos it marks inactive), so a narrow weekly window
+  was almost never hit and backlogs sat in "Awaiting Schedule". `minimumReleaseAge` is the
+  throttle instead. `prHourlyLimit` is off (runs are hours apart, so it only capped each run);
+  `prConcurrentLimit: 15` caps open PRs per repo. PRs are labeled `dependencies`.
+- **Grouping**: GitHub Actions non-major updates in one PR, Actions majors in another; `astro` +
+  `@astrojs/*` together.
+- **`gitIgnoredAuthors`**: commits by `github-actions[bot]` (e.g. a workflow rebuilding `dist/`)
+  don't make Renovate treat its branch as edited, so it keeps rebasing it.
 - **TypeScript held below 7** (`allowedVersions: "<7"`): typescript-eslint 8 and `astro check`
   don't support TS 7 yet. Drop the rule once they do.
 - **Dependency Dashboard** (from `config:recommended`) for at-a-glance visibility per repo.
