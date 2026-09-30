@@ -38,6 +38,8 @@ reference.
   stricter posture.
 - **Rate limits & schedule**: batched weekly (Monday before 9am `America/New_York`),
   `prConcurrentLimit` / `prHourlyLimit` capped. PRs are labeled `dependencies`.
+- **TypeScript held below 7** (`allowedVersions: "<7"`): typescript-eslint 8 and `astro check`
+  don't support TS 7 yet. Drop the rule once they do.
 - **Dependency Dashboard** (from `config:recommended`) for at-a-glance visibility per repo.
 
 ## Variants
