@@ -66,12 +66,13 @@ workflows' `GITHUB_TOKEN` permissions minimal and avoid exposing long-lived secr
 `postUpgradeTasks` (arbitrary command execution) is intentionally not used and is disabled on
 the Mend-hosted app.
 
-## Clearing auto-merged Renovate notifications
+## Clearing bot notifications
 
 [`clear-renovate-notifications.yml`](.github/workflows/clear-renovate-notifications.yml) runs
-hourly and marks as **done** every notification for a PR that `renovate[bot]` opened and merged
-after a bot (e.g. `renovate-approve[bot]`) approved it and no human reviewed it. PRs that are
-still open, that a person reviewed, or that a person merged are left in the inbox.
+every 15 minutes and marks as **done** every notification for a PR or issue opened by a
+dependency or automation bot (Renovate, Dependabot, github-actions, Copilot), whether it's
+open, merged, or closed. A thread stays in the inbox if a person reviewed it, a person left the
+latest comment, a person opened it, or the notification is a mention or assignment.
 
 Setup: create a [classic PAT](https://github.com/settings/tokens) with the `notifications` scope
 (add `repo` so it can read PRs in private repos; fine-grained PATs don't support the notifications API)
