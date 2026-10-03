@@ -1,8 +1,6 @@
 # renovate-config
 
-Central [Renovate](https://docs.renovatebot.com/) configuration preset shared across
-[@benbalter](https://github.com/benbalter)'s repositories. Change dependency-update policy for
-every repo in one place, here.
+Central [Renovate](https://docs.renovatebot.com/) configuration preset shared across [@benbalter](https://github.com/benbalter)'s repositories. Change dependency-update policy for every repo in one place, here.
 
 ## Usage
 
@@ -15,8 +13,7 @@ Each repo extends this preset via its `renovate.json`:
 }
 ```
 
-Renovate resolves [`default.json`](default.json) for a `github>benbalter/renovate-config`
-reference.
+Renovate resolves [`default.json`](default.json) for a `github>benbalter/renovate-config` reference.
 
 ## Policy summary
 
@@ -52,42 +49,26 @@ reference.
 
 ## Variants
 
-- **`github>benbalter/renovate-config:instant`**: GitHub native auto-merge
-  (`platformAutomerge`). Only for repos with required status checks.
-- **`github>benbalter/renovate-config:quiet`**: `automergeType: "branch"`. Auto-mergeable
-  updates merge straight from their branch once CI is green, with no PR and no notification.
-  Updates needing review still get a PR. Not for repos whose branch protection requires PRs.
+- **`github>benbalter/renovate-config:instant`**: GitHub native auto-merge (`platformAutomerge`). Only for repos with required status checks.
+- **`github>benbalter/renovate-config:quiet`**: `automergeType: "branch"`. Auto-mergeable updates merge straight from their branch once CI is green, with no PR and no notification. Updates needing review still get a PR. Not for repos whose branch protection requires PRs.
 
 ## Security notes
 
-See the [Renovate security docs](https://docs.renovatebot.com/security-and-permissions/). Key
-points for this setup: dependency-update CI runs on branches in the target repo, so keep those
-workflows' `GITHUB_TOKEN` permissions minimal and avoid exposing long-lived secrets to them.
-`postUpgradeTasks` (arbitrary command execution) is intentionally not used and is disabled on
-the Mend-hosted app.
+See the [Renovate security docs](https://docs.renovatebot.com/security-and-permissions/). Key points for this setup: dependency-update CI runs on branches in the target repo, so keep those workflows' `GITHUB_TOKEN` permissions minimal and avoid exposing long-lived secrets to them. `postUpgradeTasks` (arbitrary command execution) is intentionally not used and is disabled on the Mend-hosted app.
 
 ## Clearing bot notifications
 
-[`clear-renovate-notifications.yml`](.github/workflows/clear-renovate-notifications.yml) runs
-every 15 minutes and marks as **done** every notification for a PR or issue opened by a
-dependency or automation bot (Renovate, Dependabot, github-actions, Copilot), whether it's
-open, merged, or closed. A thread stays in the inbox if a person reviewed it, a person left the
-latest comment, a person opened it, or the notification is a mention or assignment.
+[`clear-renovate-notifications.yml`](.github/workflows/clear-renovate-notifications.yml) runs every 15 minutes and marks as **done** every notification for a PR or issue opened by a dependency or automation bot (Renovate, Dependabot, github-actions, Copilot), whether it's open, merged, or closed. A thread stays in the inbox if a person reviewed it, a person left the latest comment, a person opened it, or the notification is a mention or assignment.
 
-Setup: create a [classic PAT](https://github.com/settings/tokens) with the `notifications` scope
-(add `repo` so it can read PRs in private repos; fine-grained PATs don't support the notifications API)
-and save it as the `NOTIFICATION_TOKEN` repo secret. Run the workflow manually with `dry_run`
-checked to preview what it would clear, or locally:
+Setup: create a [classic PAT](https://github.com/settings/tokens) with the `notifications` scope (add `repo` so it can read PRs in private repos; fine-grained PATs don't support the notifications API) and save it as the `NOTIFICATION_TOKEN` repo secret. Run the workflow manually with `dry_run` checked to preview what it would clear, or locally:
 
 ```sh
 GH_TOKEN=$(gh auth token) DRY_RUN=true node .github/scripts/run-local.js
 ```
 
-The logic lives in [`clear-renovate-notifications.js`](.github/scripts/clear-renovate-notifications.js)
-(run by `actions/github-script`); tests run in CI with `node --test .github/scripts/*.test.js`.
+The logic lives in [`clear-renovate-notifications.js`](.github/scripts/clear-renovate-notifications.js) (run by `actions/github-script`); tests run in CI with `node --test .github/scripts/*.test.js`.
 
-GitHub disables scheduled workflows after 60 days without repo activity; Renovate's own PRs here
-should keep it alive, but re-enable it from the Actions tab if it stops.
+GitHub disables scheduled workflows after 60 days without repo activity; Renovate's own PRs here should keep it alive, but re-enable it from the Actions tab if it stops.
 
 ## Validate changes
 
