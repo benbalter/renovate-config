@@ -24,8 +24,7 @@ Renovate resolves [`default.json`](default.json) for a `github>benbalter/renovat
   `development`/`test` groups, Poetry/Cargo `dev-dependencies`, uv/PDM dev groups); **major**
   production-dependency bumps (npm/Poetry/Cargo `dependencies`, Composer `require`, PEP 621
   `project.dependencies`) require review.
-- **Lock file maintenance**: weekly refresh of lock files (transitive deps), auto-merged. Runs
-  any time on Monday (`America/New_York`) so a daily Mend run is guaranteed to land in the window.
+- **Lock file maintenance**: weekly refresh of lock files (transitive deps), auto-merged. Runs any time on Monday (`America/New_York`) so a daily Mend run is guaranteed to land in the window. Exempt from `minimumReleaseAge`: a lock file refresh has no release timestamp, and Renovate's default `minimumReleaseAgeBehaviour` (`timestamp-required`) would leave its `renovate/stability-days` status pending forever, so it could never auto-merge.
 - **Vulnerability alerts**: `osvVulnerabilityAlerts` opens fixes for deps with an OSV advisory,
   bypassing the schedule and release-age window.
 - **`platformAutomerge: false`**: Renovate merges only after it observes CI is green, so the
