@@ -19,11 +19,7 @@ Renovate resolves [`default.json`](default.json) for a `github>benbalter/renovat
 
 - **Base**: `config:recommended` (sane defaults + monorepo/related grouping) plus semantic
   commits. GitHub Actions stay on version tags (e.g. `@v4`), not pinned to SHA digests.
-- **Auto-merge**: patch + minor updates auto-merge once CI is green (`:automergeMinor`).
-  Dev dependencies auto-merge freely (npm `devDependencies`, Composer `require-dev`, Bundler
-  `development`/`test` groups, Poetry/Cargo `dev-dependencies`, uv/PDM dev groups); **major**
-  production-dependency bumps (npm/Poetry/Cargo `dependencies`, Composer `require`, PEP 621
-  `project.dependencies`) require review.
+- **Auto-merge**: every update auto-merges once CI is green (`:automergeAll`), majors included. CI is the gate: a red PR stays open as a real to-do, and a repo that wants review for some updates sets `"automerge": false` in its own `packageRules`.
 - **Lock file maintenance**: weekly refresh of lock files (transitive deps), auto-merged. Runs any time on Monday (`America/New_York`) so a daily Mend run is guaranteed to land in the window. Exempt from `minimumReleaseAge`: a lock file refresh has no release timestamp, and Renovate's default `minimumReleaseAgeBehaviour` (`timestamp-required`) would leave its `renovate/stability-days` status pending forever, so it could never auto-merge.
 - **Vulnerability alerts**: `osvVulnerabilityAlerts` opens fixes for deps with an OSV advisory,
   bypassing the schedule and release-age window.
