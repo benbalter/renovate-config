@@ -117,3 +117,19 @@ test("fails loudly when notifications can't be listed", async () => {
   const github = fakeGithub({});
   await assert.rejects(clearRenovateNotifications({ github, core: quietCore }), /unexpected GET \/notifications/);
 });
+
+test("never logs a private repo's URL", async () => {
+  const privateThread = (id, url) => ({ ...thread(id, "PullRequest", url), repository: { private: true } });
+  const github = fakeGithub({
+    "GET /notifications": [privateThread("1", pr(1)), privateThread("9", pr(9))],
+    [`GET ${pr(1)}`]: subject(1, renovate),
+    [`GET ${pr(1)}/reviews`]: [],
+  });
+  const lines = [];
+  const record = (msg) => lines.push(msg);
+  await clearRenovateNotifications({ github, core: { info: record, warning: record } });
+
+  assert.deepEqual(github.deleted, ["1"]);
+  assert.ok(lines.every((line) => !line.includes("o/r")), lines.join("\n"));
+  assert.ok(lines.includes("cleared: a private repo (thread 1)"));
+});

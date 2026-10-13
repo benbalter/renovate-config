@@ -34,6 +34,12 @@ async function latestCommentIsFromBot(github, thread) {
   return isBot(comment.user);
 }
 
+// This runs in a public repo, so its Actions logs are public. Never log a private
+// repo's name or PR URL; name the thread by ID instead.
+function describe(thread, url) {
+  return thread.repository?.private ? `a private repo (thread ${thread.id})` : url;
+}
+
 async function clearRenovateNotifications({ github, core, dryRun = false }) {
   // Includes read threads: they stay in the inbox until marked done.
   const notifications = await github.paginate("GET /notifications", { all: true, per_page: 50 });
@@ -57,15 +63,15 @@ async function clearRenovateNotifications({ github, core, dryRun = false }) {
       }
       if (!(await latestCommentIsFromBot(github, thread))) continue;
     } catch (error) {
-      core.warning(`skip: can't read ${thread.subject.url} (${error.status ?? error.message})`);
+      core.warning(`skip: can't read ${describe(thread, thread.subject.url)} (${error.status ?? error.message})`);
       continue;
     }
 
     if (dryRun) {
-      core.info(`would clear: ${subject.html_url}`);
+      core.info(`would clear: ${describe(thread, subject.html_url)}`);
     } else {
       await github.request("DELETE /notifications/threads/{thread_id}", { thread_id: thread.id });
-      core.info(`cleared: ${subject.html_url}`);
+      core.info(`cleared: ${describe(thread, subject.html_url)}`);
     }
     cleared.push(subject.html_url);
   }
@@ -76,4 +82,5 @@ async function clearRenovateNotifications({ github, core, dryRun = false }) {
 
 module.exports = clearRenovateNotifications;
 module.exports.isBot = isBot;
+module.exports.describe = describe;
 module.exports.hasOnlyBotReviews = hasOnlyBotReviews;
