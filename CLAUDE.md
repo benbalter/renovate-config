@@ -1,10 +1,10 @@
 # CLAUDE.md
 
-Shared Renovate presets that every @benbalter repo extends: [default.json](default.json), plus the [instant.json](instant.json) and [quiet.json](quiet.json) variants. [README.md](README.md) explains each policy choice.
+Shared Renovate presets that every @benbalter repo extends: [default.json](default.json), plus the [instant.json](instant.json), [quiet.json](quiet.json) and [private.json](private.json) variants. [README.md](README.md) explains each policy choice.
 
 ## Commands
 
-- Before committing: `npx --yes --package renovate renovate-config-validator --strict default.json instant.json quiet.json renovate.json` and `node --test .github/scripts/*.test.js`. Both run in [validate.yml](.github/workflows/validate.yml).
+- Before committing: `npx --yes --package renovate renovate-config-validator --strict default.json instant.json quiet.json private.json renovate.json` and `node --test .github/scripts/*.test.js`. Both run in [validate.yml](.github/workflows/validate.yml).
 
 ## Releasing
 

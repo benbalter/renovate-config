@@ -50,6 +50,7 @@ Renovate resolves [`default.json`](default.json) for a `github>benbalter/renovat
 
 - **`github>benbalter/renovate-config:instant`**: GitHub native auto-merge (`platformAutomerge`). Only for repos with required status checks.
 - **`github>benbalter/renovate-config:quiet`**: `automergeType: "branch"`. Auto-mergeable updates merge straight from their branch once CI is green, with no PR and no notification. Updates needing review still get a PR. Not for repos whose branch protection requires PRs.
+- **`local>benbalter/renovate-config:private`**: for private repos, where every PR's CI spends paid Actions minutes. `group:allNonMajor` rolls every minor and patch update into one PR, and `schedule` opens it once a week (Monday before 9am). Majors still get their own PRs on the same schedule; security fixes skip the schedule. A repo's own `groupName` rules come after the preset, so they still win.
 
 ## Security notes
 
@@ -72,5 +73,5 @@ GitHub disables scheduled workflows after 60 days without repo activity; Renovat
 ## Validate changes
 
 ```sh
-npx --package renovate renovate-config-validator --strict default.json instant.json quiet.json renovate.json
+npx --package renovate renovate-config-validator --strict default.json instant.json quiet.json private.json renovate.json
 ```

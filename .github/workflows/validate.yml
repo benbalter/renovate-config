@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Validate Renovate config
-        run: npx --yes --package renovate renovate-config-validator --strict default.json instant.json quiet.json renovate.json
+        run: npx --yes --package renovate renovate-config-validator --strict default.json instant.json quiet.json private.json renovate.json
 
   test:
     runs-on: ubuntu-latest
