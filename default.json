@@ -2,7 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
-    ":automergeMinor",
+    ":automergeAll",
     ":semanticCommits",
     ":maintainLockFilesWeekly"
   ],
@@ -22,25 +22,6 @@
   },
   "packageRules": [
     {
-      "description": "Auto-merge dev dependencies (they don't ship to users): npm, Composer, Bundler groups, Poetry/Cargo, uv/PDM",
-      "matchDepTypes": [
-        "devDependencies",
-        "require-dev",
-        "development",
-        "test",
-        "dev-dependencies",
-        "tool.uv.dev-dependencies",
-        "tool.pdm.dev-dependencies"
-      ],
-      "automerge": true
-    },
-    {
-      "description": "Require review for major production-dependency bumps: npm/Poetry/Cargo, Composer, PEP 621",
-      "matchDepTypes": ["dependencies", "require", "project.dependencies"],
-      "matchUpdateTypes": ["major"],
-      "automerge": false
-    },
-    {
       "description": "Hold TypeScript below 7: typescript-eslint 8 and astro check don't support TS 7 yet. Remove once they add TS 7 support.",
       "matchPackageNames": ["typescript"],
       "allowedVersions": "<7"
@@ -52,7 +33,7 @@
       "groupName": "GitHub Actions"
     },
     {
-      "description": "Group major GitHub Actions updates into one PR (usually just runtime bumps; still needs review)",
+      "description": "Group major GitHub Actions updates into one PR (usually just runtime bumps)",
       "matchManagers": ["github-actions"],
       "matchUpdateTypes": ["major"],
       "groupName": "GitHub Actions (major)"
