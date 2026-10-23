@@ -46,7 +46,7 @@ Renovate resolves [`default.json`](default.json) for a `github>benbalter/renovat
 
 - **`github>benbalter/renovate-config:instant`**: GitHub native auto-merge (`platformAutomerge`). Only for repos with required status checks.
 - **`github>benbalter/renovate-config:quiet`**: `automergeType: "branch"`. Auto-mergeable updates merge straight from their branch once CI is green, with no PR and no notification. Updates needing review still get a PR. Not for repos whose branch protection requires PRs.
-- **`local>benbalter/renovate-config:private`**: for private repos, where every PR's CI spends paid Actions minutes. `group:allNonMajor` rolls every minor and patch update into one PR, and `schedule` opens it once a week (Monday before 9am). Majors still get their own PRs on the same schedule; security fixes skip the schedule. A repo's own `groupName` rules come after the preset, so they still win.
+- **`local>benbalter/renovate-config:private`**: for private repos, where every PR's CI spends paid Actions minutes. `group:allNonMajor` rolls every minor and patch update into one PR, and `schedule` opens it once a week (Monday before 9am). Majors still get their own PRs on the same schedule, but `prConcurrentLimit: 2` keeps at most two Renovate PRs open at once. Without it, every automerge moves the base branch and Renovate rebases each other open automerge branch, rerunning its CI, so a batch of open majors costs roughly N² runs. Security fixes skip both the schedule and the cap. A repo's own `groupName` rules come after the preset, so they still win.
 
 ## Security notes
 

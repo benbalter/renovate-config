@@ -1,6 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Private-repo variant of the default preset: every non-major update lands in one PR a week, because each Renovate PR runs CI on the account's paid Actions minutes. Majors still get their own PRs (also weekly), security fixes still arrive right away, and a repo's own groupName rules still win.",
+  "description": "Private-repo variant of the default preset: every non-major update lands in one PR a week, because each Renovate PR runs CI on the account's paid Actions minutes. Majors still get their own PRs (also weekly), but at most two Renovate PRs are open at once: each automerge moves the base branch and Renovate rebases every other open automerge branch, rerunning its CI, so a batch of open majors costs roughly N squared runs. Security fixes skip both the schedule and the cap, and a repo's own groupName rules still win.",
   "extends": ["github>benbalter/renovate-config", "group:allNonMajor"],
-  "schedule": ["before 9am on monday"]
+  "schedule": ["before 9am on monday"],
+  "prConcurrentLimit": 2
 }
