@@ -15,6 +15,9 @@
   "labels": ["dependencies"],
   "gitIgnoredAuthors": ["41898282+github-actions[bot]@users.noreply.github.com"],
   "osvVulnerabilityAlerts": true,
+  "constraints": {
+    "npm": "<12"
+  },
   "lockFileMaintenance": {
     "automerge": true,
     "schedule": ["* * * * 1"],
